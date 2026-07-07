@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Limpieza Hospitalaria — HyS HZTW</title>
+  <style>
+    :root{
+      --font-sans: Arial, Helvetica, sans-serif;
+      --bg:#f4f9f9; --card:#ffffff; --ink:#12323a; --muted:#536169;
+      --line:#d6e1e3; --line2:#b7c6c9; --petroleo:#005f66; --azul:#003b49; --agua:#7fd3c6;
+      --red-bg:#FCEBEB; --red:#791F1F; --red-line:#F09595;
+      --yellow-bg:#FAEEDA; --yellow:#633806; --yellow-line:#EF9F27;
+      --green-bg:#EAF3DE; --green:#27500A; --green-line:#97C459;
+      --blue-bg:#E6F1FB; --blue:#0C447C; --blue-line:#85B7EB;
+      --violet-bg:#EEEDFE; --violet:#3C3489; --violet-line:#AFA9EC;
+      --radius:16px; --shadow:0 3px 16px rgba(0,0,0,.09);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:var(--font-sans);background:var(--bg);color:var(--ink);min-height:100vh;}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+    .app{max-width:430px;margin:0 auto;padding:12px 12px 28px}
+
+    .header{text-align:center;padding:18px 10px 20px;border-bottom:4px solid var(--agua);margin-bottom:16px;background:linear-gradient(135deg,var(--azul),var(--petroleo));color:white;border-radius:0 0 20px 20px;box-shadow:var(--shadow);}
+    .header h1{font-size:21px;font-weight:700;line-height:1.15}
+    .header p{font-size:13px;margin-top:5px;opacity:.95}
+    .header .firma{font-size:12px;margin-top:8px;font-weight:700}
+
+    .menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:16px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px 10px;text-align:center;cursor:pointer;transition:.15s;box-shadow:0 2px 8px rgba(0,0,0,.04);min-height:112px;}
+    .card:hover{background:#f7fbfb}
+    .card:active{transform:scale(.99)}
+    .card .icon{font-size:31px;margin-bottom:8px;display:block;line-height:1}
+    .card .label{font-size:14px;font-weight:700;color:var(--ink);line-height:1.25}
+    .card .sub{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.25}
+
+    .screen{display:none}
+    .screen.active{display:block}
+    .home{display:block}
+
+    .screen-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--line);}
+    .back-btn,.audio-btn{border:1px solid var(--line2);border-radius:12px;padding:8px 10px;cursor:pointer;font-size:13px;color:var(--ink);background:white;font-weight:700;}
+    .audio-btn{background:var(--agua);color:var(--azul);border-color:var(--agua);margin-left:auto;}
+    .screen-title{font-size:16px;font-weight:700;color:var(--ink);line-height:1.25}
+
+    .alert{border-radius:var(--radius);padding:12px 14px;font-size:13px;line-height:1.5;margin-bottom:10px;border:1px solid var(--line);background:white;}
+    .alert.danger{background:var(--red-bg);color:var(--red);border-color:var(--red-line)}
+    .alert.success{background:var(--green-bg);color:var(--green);border-color:var(--green-line)}
+    .alert.warning{background:var(--yellow-bg);color:var(--yellow);border-color:var(--yellow-line)}
+    .alert.info{background:var(--blue-bg);color:var(--blue);border-color:var(--blue-line)}
+
+    .section-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 8px;}
+
+    .step-list{display:flex;flex-direction:column;gap:10px}
+    .step{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:0 1px 6px rgba(0,0,0,.03);}
+    .step-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0;background:#E1F5EE;color:#085041;}
+    .step-text{font-size:14px;color:var(--ink);line-height:1.5;padding-top:4px}
+    .step-text strong{font-weight:700}
+    .step.red .step-num{background:var(--red-bg);color:var(--red)}
+    .step.yellow .step-num{background:var(--yellow-bg);color:var(--yellow)}
+    .step.green .step-num{background:var(--green-bg);color:var(--green)}
+    .step.blue .step-num{background:var(--blue-bg);color:var(--blue)}
+    .step.violet .step-num{background:var(--violet-bg);color:var(--violet)}
+
+    .area-btn,.prod-btn{width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;cursor:pointer;display:flex;align-items:center;gap:12px;margin-bottom:8px;box-shadow:0 1px 6px rgba(0,0,0,.03);}
+    .area-dot{width:15px;height:15px;border-radius:50%;flex-shrink:0}
+    .area-info .name,.prod-info .name{font-size:14px;font-weight:700;color:var(--ink)}
+    .area-info .desc,.prod-info .desc{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.35}
+    .badge{display:inline-block;font-size:11px;padding:3px 8px;border-radius:10px;font-weight:700;margin-top:6px}
+    .badge.rojo{background:var(--red-bg);color:var(--red)}
+    .badge.amarillo{background:var(--yellow-bg);color:var(--yellow)}
+    .badge.verde{background:var(--green-bg);color:var(--green)}
+    .badge.azul{background:var(--blue-bg);color:var(--blue)}
+
+    .epp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:12px}
+    .epp-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px;text-align:center;min-height:116px;}
+    .epp-card .epp-icon{font-size:28px;display:block;margin-bottom:6px}
+    .epp-card .epp-name{font-size:13px;font-weight:700;color:var(--ink)}
+    .epp-card .epp-desc{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.35}
+
+    .bolsa-grid{display:grid;grid-template-columns:1fr;gap:8px}
+    .bolsa-card{border-radius:var(--radius);padding:14px;display:flex;gap:12px;align-items:flex-start;border:1px solid var(--line)}
+    .bolsa-icon{font-size:26px;flex-shrink:0;width:34px;text-align:center}
+    .bolsa-info .title{font-size:14px;font-weight:700}
+    .bolsa-info .items{font-size:12px;margin-top:5px;line-height:1.55}
+    .bolsa-card.negra{background:#F1EFE8;border-color:#B4B2A9}.bolsa-card.negra .title{color:#2C2C2A}.bolsa-card.negra .items{color:#5F5E5A}
+    .bolsa-card.roja{background:var(--red-bg);border-color:var(--red-line)}.bolsa-card.roja .title{color:var(--red)}.bolsa-card.roja .items{color:#993C1D}
+    .bolsa-card.amarilla{background:var(--yellow-bg);border-color:var(--yellow-line)}.bolsa-card.amarilla .title{color:var(--yellow)}.bolsa-card.amarilla .items{color:#854F0B}
+    .bolsa-card.bidon{background:#FAC775;border-color:#BA7517}.bolsa-card.bidon .title{color:#412402}.bolsa-card.bidon .items{color:#633806}
+    .bolsa-card.rigido{background:var(--blue-bg);border-color:var(--blue-line)}.bolsa-card.rigido .title{color:var(--blue)}.bolsa-card.rigido .items{color:#185FA5}
+    .bolsa-card.caja{background:var(--violet-bg);border-color:var(--violet-line)}.bolsa-card.caja .title{color:var(--violet)}.bolsa-card.caja .items{color:#534AB7}
+    .bolsa-card.verde{background:var(--green-bg);border-color:var(--green-line)}.bolsa-card.verde .title{color:var(--green)}.bolsa-card.verde .items{color:#3B6D11}
+    .bolsa-card.compost{background:#C0DD97;border-color:#639922}.bolsa-card.compost .title{color:#173404}.bolsa-card.compost .items{color:#27500A}
+    .bolsa-card.papel{background:var(--blue-bg);border-color:var(--blue-line)}.bolsa-card.papel .title{color:var(--blue)}.bolsa-card.papel .items{color:#185FA5}
+    .bolsa-card.carton{background:var(--yellow-bg);border-color:var(--yellow-line)}.bolsa-card.carton .title{color:var(--yellow)}.bolsa-card.carton .items{color:#854F0B}
+    .no-list{font-size:12px;margin-top:6px;line-height:1.55;padding:8px 10px;border-radius:12px;background:#FCEBEB;color:#791F1F;border:1px solid #F09595}
+    .bidon-label{display:inline-block;background:#BA7517;color:#fff;font-size:12px;font-weight:700;padding:3px 9px;border-radius:10px;margin-bottom:4px;letter-spacing:.7px}
+
+    .funcion-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;}
+    .funcion-num{width:28px;height:28px;border-radius:50%;background:#E1F5EE;color:#085041;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:1px;}
+    .funcion-text{font-size:13px;color:var(--ink);line-height:1.5}
+
+    .ver-mas-btn{width:100%;background:white;border:1px dashed var(--line2);border-radius:var(--radius);padding:12px;text-align:center;cursor:pointer;color:var(--muted);font-size:13px;font-weight:700;margin-top:4px;}
+    .ver-mas-content{display:none}
+    .ver-mas-content.open{display:block}
+
+    .contacto-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;}
+    .contacto-icon{font-size:22px;flex-shrink:0;width:30px;text-align:center;padding-top:2px}
+    .contacto-info .label{font-size:11px;color:var(--muted);margin-bottom:2px;line-height:1.3}
+    .contacto-info .value{font-size:14px;font-weight:700;color:var(--ink);line-height:1.4}
+    .contacto-info .sub{font-size:11px;color:var(--muted);margin-top:2px}
+    .tel-pill{display:inline-block;font-size:16px;font-weight:700;padding:6px 14px;border-radius:var(--radius);margin-top:4px;letter-spacing:.5px;}
+    .tel-pill.verde{background:var(--green-bg);color:var(--green)}
+    .tel-pill.naranja{background:var(--yellow-bg);color:var(--yellow)}
+    .tel-link{text-decoration:none;display:block}
+    .mail-link{color:var(--blue);font-size:13px;word-break:break-all}
+
+    .autoseguro-header{background:var(--petroleo);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;}
+    .autoseguro-header .as-title{font-size:14px;font-weight:700;color:#fff}
+    .autoseguro-header .as-sub{font-size:12px;color:#9FE1CB;margin-top:2px}
+
+    .footer{margin-top:18px;font-size:11px;color:var(--muted);line-height:1.45;text-align:center;padding:12px 8px 18px;}
+    .footer strong{color:var(--azul)}
+
+    @media(min-width:520px){.app{max-width:470px}}
+  </style>
+</head>
+<body>
+<h2 class="sr-only">Guia de limpieza hospitalaria HyS Hospital Zonal Trelew</h2>
+<div class="app">
+
+  <!-- HOME -->
+  <div id="home" class="home">
+    <div class="header">
+      <h1>🏥 Limpieza Hospitalaria</h1>
+      <p>Higiene y Seguridad Laboral · Lic. Belén Pellegrini</p>
+    </div>
+    <div class="alert info">Tocá un botón y seguí los pasos. Esta guía apoya el trabajo seguro pero no reemplaza la indicación del sector, la supervisión ni el referente técnico.</div>
+    <div class="menu">
+      <div class="card" onclick="show('pasos')"><span class="icon">🧹</span><div class="label">Cómo limpiar</div><div class="sub">Método y pasos</div></div>
+      <div class="card" onclick="show('areas')"><span class="icon">🗺️</span><div class="label">Por área</div><div class="sub">Crítica, semi, no crítica</div></div>
+      <div class="card" onclick="show('productos')"><span class="icon">🧴</span><div class="label">Productos</div><div class="sub">Lavandina y 1 paso</div></div>
+      <div class="card" onclick="show('epp')"><span class="icon">🧤</span><div class="label">EPP</div><div class="sub">Qué usar según tarea</div></div>
+      <div class="card" onclick="show('manos')"><span class="icon">🙌</span><div class="label">Manos</div><div class="sub">Cuándo y cómo</div></div>
+      <div class="card" onclick="show('residuos')"><span class="icon">🗑️</span><div class="label">Residuos</div><div class="sub">Bolsa o envase correcto</div></div>
+      <div class="card" onclick="show('funciones')"><span class="icon">📋</span><div class="label">Mis funciones</div><div class="sub">Tareas y registros</div></div>
+      <div class="card" onclick="show('accidentes')"><span class="icon">🚨</span><div class="label">Accidentes</div><div class="sub">Qué hacer · Autoseguro</div></div>
+      <div class="card" onclick="show('aislamientos')"><span class="icon">🚪</span><div class="label">Aislamientos</div><div class="sub">Carteles y EPP por tipo</div></div>
+    </div>
+  </div>
+
+  <!-- CÓMO LIMPIAR -->
+  <div id="pasos" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">🧹 Cómo limpiar</span>
+      <button class="audio-btn" onclick="speakScreen('pasos')">🔊</button>
+    </div>
+    <div class="alert warning">Regla principal: de <strong>arriba hacia abajo</strong> y de lo <strong>más limpio a lo más sucio</strong>.</div>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-text">Ponerse <strong>guantes de uso doméstico</strong> antes de empezar.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text">Preparar <strong>dos baldes</strong>: uno con agua tibia y detergente; otro con agua limpia para enjuague.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text">Fregar con detergente las superficies: cama, barandas, mesa de luz, mesas, repisas, picaportes e interruptores.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text">Enjuagar con otro trapo y agua limpia.</div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-text">Desinfectar según el área. Ver diluciones en <strong>Productos</strong> o <strong>Por área</strong>.</div></div>
+      <div class="step"><div class="step-num">6</div><div class="step-text">Limpiar el piso con método húmedo. No baldear.</div></div>
+      <div class="step"><div class="step-num">7</div><div class="step-text">El baño se limpia al final, con trapos y baldes exclusivos.</div></div>
+      <div class="step"><div class="step-num">8</div><div class="step-text">Al terminar: lavar, desinfectar con lavandina 200 ppm durante 5 minutos, enjuagar y dejar secar los elementos usados.</div></div>
+    </div>
+    <div class="section-title">No hacer</div>
+    <div class="step-list">
+      <div class="step red"><div class="step-num">✕</div><div class="step-text">No usar escoba, plumero, escobillón ni franela seca: levantan polvo y gérmenes.</div></div>
+      <div class="step red"><div class="step-num">✕</div><div class="step-text">No mezclar lavandina con detergente u otros productos: genera gases tóxicos.</div></div>
+      <div class="step red"><div class="step-num">✕</div><div class="step-text">No desinfectar si todavía hay suciedad visible: el desinfectante no actúa.</div></div>
+      <div class="step red"><div class="step-num">✕</div><div class="step-text">No usar los trapos del baño en habitaciones, consultorios ni office.</div></div>
+      <div class="step red"><div class="step-num">✕</div><div class="step-text">No lavar elementos de limpieza en piletas de higiene de manos.</div></div>
+    </div>
+  </div>
+
+  <!-- POR ÁREA -->
+  <div id="areas" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">🗺️ Por área</span>
+      <button class="audio-btn" onclick="speakScreen('areas')">🔊</button>
+    </div>
+    <div class="alert info">Tocá el área para ver la dilución y los cuidados específicos.</div>
+    <button class="area-btn" onclick="show('area-critica')">
+      <div class="area-dot" style="background:#E24B4A"></div>
+      <div class="area-info"><div class="name">🔴 Área crítica</div><div class="desc">Quirófano, UTI, neonatología, guardia, laboratorio, aislamiento, hemoterapia, esterilización, farmacia.</div><span class="badge rojo">Lavandina 5000 ppm</span></div>
+    </button>
+    <button class="area-btn" onclick="show('area-semi')">
+      <div class="area-dot" style="background:#EF9F27"></div>
+      <div class="area-info"><div class="name">🟡 Área semi-crítica</div><div class="desc">Salas de clínica, consultorios, oficinas al público, ascensores y pasillos internos.</div><span class="badge amarillo">Lavandina 500 ppm</span></div>
+    </button>
+    <button class="area-btn" onclick="show('area-nocritica')">
+      <div class="area-dot" style="background:#639922"></div>
+      <div class="area-info"><div class="name">🟢 Área no crítica</div><div class="desc">Zona administrativa, hall, oficinas sin atención al público, grandes pasillos de acceso.</div><span class="badge verde">Lavandina 200 ppm</span></div>
+    </button>
+    <div class="alert warning" style="margin-top:4px">Si hay sangre o fluidos: primero limpiar con agua y jabón. Después desinfectar con 5000 ppm.</div>
+  </div>
+
+  <div id="area-critica" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('areas')">← Volver</button>
+      <span class="screen-title">🔴 Área crítica</span>
+      <button class="audio-btn" onclick="speakScreen('area-critica')">🔊</button>
+    </div>
+    <div class="alert danger">No ingresar sin EPP indicado y autorización del sector.</div>
+    <div class="section-title">Dilución — lavandina líquida al 6%</div>
+    <div class="step red"><div class="step-num">!</div><div class="step-text"><strong>5000 ppm:</strong> 100 ml de lavandina + 1 litro de agua.<br>Alternativa: 500 ml + 5 litros de agua.</div></div>
+    <div class="section-title">En quirófano</div>
+    <div class="alert info">🚧 <strong>En construcción.</strong> El protocolo de limpieza en quirófano está siendo definido por el sector. Seguir la indicación del referente hasta que esté disponible.</div>
+    <div class="alert warning" style="margin-top:4px">En aislamiento: seguir el cartel de la puerta o la indicación de enfermería. El EPP varía según el tipo.</div>
+  </div>
+
+  <div id="area-semi" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('areas')">← Volver</button>
+      <span class="screen-title">🟡 Área semi-crítica</span>
+      <button class="audio-btn" onclick="speakScreen('area-semi')">🔊</button>
+    </div>
+    <div class="section-title">Dilución — lavandina líquida al 6%</div>
+    <div class="step yellow"><div class="step-num">!</div><div class="step-text"><strong>500 ppm:</strong> 50 ml de lavandina + 5 litros de agua.</div></div>
+    <div class="alert warning" style="margin-top:10px">Prestar atención a picaportes, manijas, barandas y superficies que se tocan con frecuencia. Limpiarlas todos los días.</div>
+  </div>
+
+  <div id="area-nocritica" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('areas')">← Volver</button>
+      <span class="screen-title">🟢 Área no crítica</span>
+      <button class="audio-btn" onclick="speakScreen('area-nocritica')">🔊</button>
+    </div>
+    <div class="section-title">Dilución — lavandina líquida al 6%</div>
+    <div class="step green"><div class="step-num">!</div><div class="step-text"><strong>200 ppm:</strong> 25 ml de lavandina + 5 litros de agua.</div></div>
+    <div class="alert success" style="margin-top:10px">En pisos y superficies poco tocadas puede ser suficiente limpieza con agua y detergente, salvo indicación del sector.</div>
+  </div>
+
+  <!-- PRODUCTOS -->
+  <div id="productos" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">🧴 Productos</span>
+      <button class="audio-btn" onclick="speakScreen('productos')">🔊</button>
+    </div>
+    <div class="alert info">Solo se usan productos autorizados por la institución. Ante cualquier duda sobre un producto, consultar antes de usarlo.</div>
+    <button class="prod-btn" onclick="show('lavandina')">
+      <div class="area-dot" style="background:#E24B4A"></div>
+      <div class="prod-info"><div class="name">🧴 Lavandina (hipoclorito de sodio)</div><div class="desc">Desinfectante de superficies. Dilución según área. Siempre agua fría.</div><span class="badge rojo">200 · 500 · 5000 ppm</span></div>
+    </button>
+    <button class="prod-btn" onclick="show('peroxo')">
+      <div class="area-dot" style="background:#005f66"></div>
+      <div class="prod-info"><div class="name">🧪 Limpiador de 1 paso</div><div class="desc">Peroxomonosulfato de potasio estabilizado. Limpia y desinfecta al mismo tiempo.</div><span class="badge azul">Válido 24 h · requiere antiparras</span></div>
+    </button>
+    <div class="section-title">Reglas para todos los productos</div>
+    <div class="step-list">
+      <div class="step blue"><div class="step-num">1</div><div class="step-text">Usar solo productos autorizados por la institución.</div></div>
+      <div class="step blue"><div class="step-num">2</div><div class="step-text">No preparar "a ojo". Respetar la dilución y el tiempo de contacto indicados.</div></div>
+      <div class="step blue"><div class="step-num">3</div><div class="step-text">Rotular todo envase preparado: nombre del producto, fecha y hora.</div></div>
+      <div class="step blue"><div class="step-num">4</div><div class="step-text">No mezclar productos entre sí. Las mezclas pueden ser tóxicas o neutralizarse.</div></div>
+      <div class="step blue"><div class="step-num">5</div><div class="step-text">No guardar en botellas de agua, gaseosa ni medicamentos.</div></div>
+    </div>
+  </div>
+
+  <!-- LAVANDINA -->
+  <div id="lavandina" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('productos')">← Volver</button>
+      <span class="screen-title">🧴 Lavandina</span>
+      <button class="audio-btn" onclick="speakScreen('lavandina')">🔊</button>
+    </div>
+    <div class="alert danger">🚫 Nunca mezclar con detergente, desinfectantes, ácidos, amonios u otros productos.</div>
+    <div class="alert danger">🚫 Preparar siempre con agua fría. El agua caliente genera vapores peligrosos.</div>
+    <div class="section-title">Diluciones — lavandina líquida al 6%</div>
+    <div class="step-list">
+      <div class="step red"><div class="step-num">🔴</div><div class="step-text"><strong>Área crítica / derrame con sangre:</strong><br>5000 ppm = 100 ml + 1 litro de agua.</div></div>
+      <div class="step yellow"><div class="step-num">🟡</div><div class="step-text"><strong>Área semi-crítica:</strong><br>500 ppm = 50 ml + 5 litros de agua.</div></div>
+      <div class="step green"><div class="step-num">🟢</div><div class="step-text"><strong>Área no crítica:</strong><br>200 ppm = 25 ml + 5 litros de agua.</div></div>
+    </div>
+    <div class="section-title">Reglas</div>
+    <div class="alert warning">Preparar el mismo día. Usar dentro de las 24 horas. Descartar lo que sobre.</div>
+    <div class="alert warning">Guardar en envase limpio, opaco, cerrado e identificado. Lejos de la luz y el calor.</div>
+    <div class="alert danger">La lavandina se inactiva con materia orgánica. Primero limpiar, después desinfectar.</div>
+  </div>
+
+  <!-- PRODUCTO 1 PASO -->
+  <div id="peroxo" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('productos')">← Volver</button>
+      <span class="screen-title">🧪 Limpiador 1 paso</span>
+      <button class="audio-btn" onclick="speakScreen('peroxo')">🔊</button>
+    </div>
+    <div class="alert info"><strong>Peroxomonosulfato de potasio estabilizado (0,5 a 1%).</strong> Limpia y desinfecta al mismo tiempo según dilución y uso indicados por el fabricante.</div>
+    <div class="section-title">Para qué sirve</div>
+    <div class="step-list">
+      <div class="step blue"><div class="step-num">1</div><div class="step-text">Higiene y desinfección diaria del entorno del paciente: cama, incubadoras, mesas, pie de suero, picaportes y sanitarios.</div></div>
+      <div class="step blue"><div class="step-num">2</div><div class="step-text">También en áreas quirúrgicas según indicación del sector.</div></div>
+    </div>
+    <div class="section-title">Cómo prepararlo y usarlo</div>
+    <div class="step-list">
+      <div class="step yellow"><div class="step-num">1</div><div class="step-text">Preparar según la concentración del fabricante. Rotular con nombre, fecha y hora.</div></div>
+      <div class="step yellow"><div class="step-num">2</div><div class="step-text">Una vez preparado, es válido por <strong>24 horas</strong>. Si pasaron las 24 h o no se sabe cuándo fue preparado: descartar.</div></div>
+      <div class="step yellow"><div class="step-num">3</div><div class="step-text">Aplicar con pulverizador o con trapo limpio húmedo. Si se pulveriza: dejar actuar <strong>10 minutos</strong> y luego secar sin enjuagar.</div></div>
+    </div>
+    <div class="section-title">EPP obligatorio</div>
+    <div class="step-list">
+      <div class="step red"><div class="step-num">!</div><div class="step-text">Usar <strong>guantes</strong> siempre.</div></div>
+      <div class="step red"><div class="step-num">!</div><div class="step-text">Usar <strong>antiparras</strong> al preparar o pulverizar.</div></div>
+    </div>
+    <div class="alert danger" style="margin-top:10px">No usar producto preparado hace más de 24 horas. No mezclar con lavandina ni detergente.</div>
+  </div>
+
+  <!-- EPP -->
+  <div id="epp" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">🧤 EPP</span>
+      <button class="audio-btn" onclick="speakScreen('epp')">🔊</button>
+    </div>
+    <div class="alert success">El EPP se define por la tarea, el sector y el cartel de aislamiento. Si no sabés qué usar, consultá antes de ingresar.</div>
+    <div class="epp-grid">
+      <div class="epp-card">
+        <span class="epp-icon">🧤</span>
+        <div class="epp-name">Guantes de goma</div>
+        <div class="epp-desc">Siempre en limpieza general. Lavarse manos al retirarlos.</div>
+      </div>
+      <div class="epp-card">
+        <span class="epp-icon">😷</span>
+        <div class="epp-name">Barbijo</div>
+        <div class="epp-desc">Según aislamiento, salpicaduras o indicación del sector.</div>
+      </div>
+      <div class="epp-card">
+        <span class="epp-icon">🥽</span>
+        <div class="epp-name">Antiparras</div>
+        <div class="epp-desc">Riesgo de salpicadura química o biológica. Al preparar productos.</div>
+      </div>
+      <div class="epp-card">
+        <span class="epp-icon">🥼</span>
+        <div class="epp-name">Bata / delantal</div>
+        <div class="epp-desc">Riesgo de contacto con fluidos o sector especial.</div>
+      </div>
+      <div class="epp-card">
+        <div style="margin-bottom:6px">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="16" cy="10" rx="12" ry="6" fill="#7fd3c6"/>
+            <rect x="4" y="10" width="24" height="4" rx="2" fill="#005f66"/>
+            <rect x="7" y="14" width="18" height="2" rx="1" fill="#7fd3c6"/>
+          </svg>
+        </div>
+        <div class="epp-name">Cofia</div>
+        <div class="epp-desc">Quirófano, áreas especiales o indicación local.</div>
+      </div>
+      <div class="epp-card">
+        <div style="margin-bottom:6px">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="5" y="10" width="9" height="16" rx="2" fill="#005f66"/>
+            <rect x="18" y="10" width="9" height="16" rx="2" fill="#005f66"/>
+            <rect x="5" y="22" width="11" height="5" rx="2" fill="#003b49"/>
+            <rect x="16" y="22" width="11" height="5" rx="2" fill="#003b49"/>
+            <rect x="4" y="8" width="11" height="5" rx="2" fill="#7fd3c6"/>
+            <rect x="17" y="8" width="11" height="5" rx="2" fill="#7fd3c6"/>
+          </svg>
+        </div>
+        <div class="epp-name">Calzado cerrado</div>
+        <div class="epp-desc">Siempre. Botas si hay riesgo de mojado o químicos.</div>
+      </div>
+    </div>
+    <div class="section-title">Carteles de aislamiento</div>
+    <button class="area-btn" onclick="show('aislamientos')">
+      <div class="area-dot" style="background:var(--petroleo)"></div>
+      <div class="area-info"><div class="name">🚪 Ver pantalla de aislamientos</div><div class="desc">Los 4 tipos de cartel, EPP requerido y qué hacer en cada caso.</div></div>
+    </button>
+    <div class="alert warning" style="margin-top:4px">Si el cartel no se entiende, no ingresar. Consultar a enfermería o al referente del sector.</div>
+  </div>
+
+  <!-- AISLAMIENTOS -->
+  <div id="aislamientos" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">🚪 Aislamientos</span>
+      <button class="audio-btn" onclick="speakScreen('aislamientos')">🔊</button>
+    </div>
+
+    <div class="alert warning">Antes de entrar a cualquier habitación con cartel: leer el cartel, colocarse el EPP indicado y cerrar la puerta al salir.</div>
+    <div class="alert info">Ante cualquier duda sobre el EPP requerido: no ingresar y consultar a enfermería o al referente del sector.</div>
+
+    <!-- PRECAUCIONES ESTÁNDAR -->
+    <div class="aislamiento-card" style="border:2px solid var(--red-line);border-radius:var(--radius);background:var(--red-bg);padding:16px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--red);flex-shrink:0"></div>
+        <div style="font-size:16px;font-weight:700;color:var(--red)">🔴 Precauciones estándar</div>
+      </div>
+      <div style="font-size:12px;color:var(--red);margin-bottom:10px;line-height:1.4">Para todos los pacientes, siempre. Se aplican en toda la institución.</div>
+      <div class="section-title" style="margin-top:0">EPP requerido</div>
+      <div class="step-list">
+        <div class="step red"><div class="step-num">✓</div><div class="step-text"><strong>Guantes de uso doméstico</strong> para limpiar.</div></div>
+        <div class="step red"><div class="step-num">✓</div><div class="step-text"><strong>Barbijo</strong> si hay riesgo de salpicadura con sangre o fluidos.</div></div>
+        <div class="step red"><div class="step-num">✓</div><div class="step-text"><strong>Higiene de manos</strong> antes y después, y siempre al quitarse los guantes.</div></div>
+      </div>
+    </div>
+
+    <!-- AISLAMIENTO POR CONTACTO -->
+    <div class="aislamiento-card" style="border:2px solid var(--yellow-line);border-radius:var(--radius);background:var(--yellow-bg);padding:16px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--yellow);flex-shrink:0"></div>
+        <div style="font-size:16px;font-weight:700;color:var(--yellow)">🟡 Aislamiento por contacto</div>
+      </div>
+      <div style="font-size:12px;color:var(--yellow);margin-bottom:10px;line-height:1.4">Gérmenes que se transmiten al tocar al paciente o superficies de la habitación. Ejemplos: ERV, Clostridium difficile, SAMR.</div>
+      <div class="section-title" style="margin-top:0">EPP requerido</div>
+      <div class="step-list">
+        <div class="step yellow"><div class="step-num">✓</div><div class="step-text"><strong>Guantes</strong> al ingresar. Cambiarlos si se contaminan durante la tarea.</div></div>
+        <div class="step yellow"><div class="step-num">✓</div><div class="step-text"><strong>Bata o camisolín</strong> de manga larga al ingresar.</div></div>
+        <div class="step yellow"><div class="step-num">✓</div><div class="step-text"><strong>Higiene de manos</strong> siempre al quitarse los guantes y al salir.</div></div>
+      </div>
+      <div class="section-title">Limpieza</div>
+      <div class="step-list">
+        <div class="step yellow"><div class="step-num">!</div><div class="step-text">Higiene y desinfección diaria de toda la unidad del paciente. Elementos exclusivos de la habitación.</div></div>
+        <div class="step yellow"><div class="step-num">!</div><div class="step-text">Al egreso del paciente: limpieza terminal completa incluyendo paredes y techo.</div></div>
+      </div>
+    </div>
+
+    <!-- AISLAMIENTO POR GOTAS -->
+    <div class="aislamiento-card" style="border:2px solid var(--green-line);border-radius:var(--radius);background:var(--green-bg);padding:16px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--green);flex-shrink:0"></div>
+        <div style="font-size:16px;font-weight:700;color:var(--green)">🟢 Aislamiento respiratorio por gotas</div>
+      </div>
+      <div style="font-size:12px;color:var(--green);margin-bottom:10px;line-height:1.4">Gérmenes que se transmiten por gotas grandes al hablar, toser o estornudar. Ejemplos: influenza, meningitis bacteriana, coqueluche, paperas.</div>
+      <div class="section-title" style="margin-top:0">EPP requerido</div>
+      <div class="step-list">
+        <div class="step green"><div class="step-num">✓</div><div class="step-text"><strong>Barbijo quirúrgico</strong> antes de entrar a la habitación. Retirarlo al salir.</div></div>
+        <div class="step green"><div class="step-num">✓</div><div class="step-text"><strong>Guantes</strong> al limpiar.</div></div>
+        <div class="step green"><div class="step-num">✓</div><div class="step-text"><strong>Higiene de manos</strong> antes y después, y siempre al quitarse los guantes.</div></div>
+      </div>
+      <div class="section-title">Limpieza</div>
+      <div class="step-list">
+        <div class="step green"><div class="step-num">!</div><div class="step-text">Higiene y desinfección diaria de la unidad del paciente. Mantener la puerta cerrada.</div></div>
+      </div>
+    </div>
+
+    <!-- AISLAMIENTO AÉREO -->
+    <div class="aislamiento-card" style="border:2px solid var(--blue-line);border-radius:var(--radius);background:var(--blue-bg);padding:16px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--blue);flex-shrink:0"></div>
+        <div style="font-size:16px;font-weight:700;color:var(--blue)">🔵 Aislamiento respiratorio aéreo</div>
+      </div>
+      <div style="font-size:12px;color:var(--blue);margin-bottom:10px;line-height:1.4">Gérmenes que se transmiten por partículas muy pequeñas que quedan suspendidas en el aire. Ejemplo principal: tuberculosis.</div>
+      <div class="section-title" style="margin-top:0">EPP requerido</div>
+      <div class="step-list">
+        <div class="step blue"><div class="step-num">✓</div><div class="step-text"><strong>Respirador N95</strong> antes de entrar. No es lo mismo que barbijo quirúrgico.</div></div>
+        <div class="step blue"><div class="step-num">✓</div><div class="step-text"><strong>Guantes</strong> al limpiar.</div></div>
+        <div class="step blue"><div class="step-num">✓</div><div class="step-text"><strong>Higiene de manos</strong> antes y después, y siempre al quitarse los guantes.</div></div>
+      </div>
+      <div class="section-title">Limpieza</div>
+      <div class="step-list">
+        <div class="step blue"><div class="step-num">!</div><div class="step-text">Habitación privada, presión negativa, <strong>puerta siempre cerrada</strong>. No abrir sin N95 colocado.</div></div>
+        <div class="step blue"><div class="step-num">!</div><div class="step-text">Higiene y desinfección diaria de la unidad del paciente.</div></div>
+      </div>
+    </div>
+
+    <div class="section-title">Al salir de cualquier habitación con aislamiento</div>
+    <div class="step-list">
+      <div class="step"><div class="step-num">1</div><div class="step-text">Retirar la bata (si aplica): doblarla hacia adentro para que la parte contaminada quede hacia dentro.</div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-text">Retirar los guantes. Quitarlos dando vuelta hacia adentro.</div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-text">Retirar el barbijo o N95 tocando solo las tiras. Nunca tocar la parte delantera.</div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-text">Higiene de manos antes de salir de la habitación.</div></div>
+    </div>
+    <div class="alert danger" style="margin-top:10px">La ropa de mucama usada en aislamiento se descarta en bolsa roja o según indicación del sector. No reutilizar sin reprocesar.</div>
+  </div>
+
+  <!-- MANOS -->
+  <div id="manos" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">🙌 Lavado de manos</span>
+      <button class="audio-btn" onclick="speakScreen('manos')">🔊</button>
+    </div>
+    <div class="alert success">Lavarse las manos aunque se usen guantes. Es la medida más importante para prevenir infecciones.</div>
+    <div class="section-title">Cuándo</div>
+    <div class="step-list">
+      <div class="step blue"><div class="step-num">1</div><div class="step-text">Al llegar al trabajo.</div></div>
+      <div class="step blue"><div class="step-num">2</div><div class="step-text">Antes de colocarse guantes y siempre después de retirarlos.</div></div>
+      <div class="step blue"><div class="step-num">3</div><div class="step-text">Después de manipular residuos o elementos sucios.</div></div>
+      <div class="step blue"><div class="step-num">4</div><div class="step-text">Después de usar el baño.</div></div>
+      <div class="step blue"><div class="step-num">5</div><div class="step-text">Antes y después de comer o beber.</div></div>
+      <div class="step blue"><div class="step-num">6</div><div class="step-text">Cada vez que se cambia de tarea o sector.</div></div>
+      <div class="step blue"><div class="step-num">7</div><div class="step-text">Antes de retirarse a casa.</div></div>
+    </div>
+    <div class="section-title">Cómo</div>
+    <div class="step-list">
+      <div class="step blue"><div class="step-num">1</div><div class="step-text">Mojar las manos con agua.</div></div>
+      <div class="step blue"><div class="step-num">2</div><div class="step-text">Enjabonar y frotar palmas, dorso, entre los dedos y bajo las uñas durante <strong>20 segundos mínimo</strong>.</div></div>
+      <div class="step blue"><div class="step-num">3</div><div class="step-text">Enjuagar bien con agua corriente.</div></div>
+      <div class="step blue"><div class="step-num">4</div><div class="step-text">Secar con toalla descartable.</div></div>
+      <div class="step blue"><div class="step-num">5</div><div class="step-text">Cerrar la canilla con la toalla antes de descartarla.</div></div>
+    </div>
+  </div>
+
+  <!-- RESIDUOS -->
+  <div id="residuos" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">🗑️ Residuos</span>
+      <button class="audio-btn" onclick="speakScreen('residuos')">🔊</button>
+    </div>
+    <div class="alert warning"><strong>Separar donde se genera.</strong> No mezclar. No pasar residuos de una bolsa a otra.</div>
+    <div class="alert info">Retirar antes del desborde. Regla operativa: no superar <strong>3/4 de capacidad</strong>.</div>
+    <div class="bolsa-grid">
+
+      <div class="bolsa-card negra">
+        <div class="bolsa-icon">⚫</div>
+        <div class="bolsa-info">
+          <div class="title">Bolsa negra — residuo común</div>
+          <div class="items">Papeles sucios · cartones sucios · restos de comida no compostables · flores · revistas · embalajes · residuos de oficinas, salas de espera y áreas administrativas.</div>
+          <div class="no-list">No va: sangre, gasas, material de aislamiento, cortopunzantes, medicamentos ni residuos contaminados.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card roja">
+        <div class="bolsa-icon">🔴</div>
+        <div class="bolsa-info">
+          <div class="title">Bolsa roja — riesgo biológico</div>
+          <div class="items">Material con sangre, secreciones o fluidos · gasas, apósitos y guantes descartables contaminados · material de aislamiento · residuos de sectores con riesgo biológico.</div>
+          <div class="no-list">No compactar. No apoyar contra el cuerpo. No arrastrar. No abrir bolsas cerradas.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card amarilla">
+        <div class="bolsa-icon">🟡</div>
+        <div class="bolsa-info">
+          <div class="title">Bolsa amarilla — medicamentos</div>
+          <div class="items">Frascos de suero contaminados · medicamentos vencidos o sobrantes · envases de medicamentos · blísteres usados.</div>
+          <div class="no-list">No descartar medicamentos en bolsa negra ni roja. Consultar ante duda.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card bidon">
+        <div class="bolsa-icon">🧪</div>
+        <div class="bolsa-info">
+          <div class="bidon-label">BIDÓN Y3</div>
+          <div class="title">Bidón amarillo rotulado Y3</div>
+          <div class="items">Frascos y ampollas utilizados o vencidos · frascos de medicamentos inyectables vacíos · ampollas de vidrio usadas o vencidas. Evita cortes al manipular bolsas.</div>
+          <div class="no-list">No usar bolsa común, bolsa roja ni reciclables. Solo bidón amarillo rotulado Y3.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card rigido">
+        <div class="bolsa-icon">
+          <svg width="26" height="32" viewBox="0 0 28 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="4" y="7" width="20" height="24" rx="3" fill="#E24B4A"/>
+            <rect x="2" y="4" width="24" height="5" rx="2" fill="#A32D2D"/>
+            <rect x="10" y="1" width="8" height="4" rx="1.5" fill="#A32D2D"/>
+            <circle cx="14" cy="19" r="5" fill="white" fill-opacity="0.25"/>
+            <path d="M14 15v4M14 19l3 2" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="14" cy="19" r="4" stroke="white" stroke-width="1.2" fill="none"/>
+          </svg>
+        </div>
+        <div class="bolsa-info">
+          <div class="title">Descartador rígido — cortopunzantes</div>
+          <div class="items">Agujas · hojas de bisturí · lancetas · catéteres · cables epicárdicos · otros cortopunzantes.</div>
+          <div class="no-list">Al llegar a 3/4: cerrar la tapa y depositar según circuito. No doblar ni reencapuchar agujas. Si hay cortopunzante fuera del descartador: no tocar con la mano, aislar el sector y avisar.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card caja">
+        <div class="bolsa-icon">📦</div>
+        <div class="bolsa-info">
+          <div class="title">Caja cerrada y rotulada — vidrios rotos</div>
+          <div class="items">Juntar con pala, nunca con la mano. Caja de cartón rígida, bien cerrada, rotulada: <strong>"PRECAUCIÓN — VIDRIOS ROTOS"</strong>. Luego colocar en bolsa negra.</div>
+          <div class="no-list">Si el vidrio está contaminado con sangre o fluidos: seguir circuito biológico y avisar al superior.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card verde">
+        <div class="bolsa-icon">♻️</div>
+        <div class="bolsa-info">
+          <div class="title">Bolsa verde — plásticos limpios</div>
+          <div class="items">Todos los plásticos limpios · botellas · envases · tapitas · bolsas plásticas limpias.</div>
+          <div class="no-list">No va: material con sangre, secreciones, medicación, químicos o residuos de aislamiento.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card compost">
+        <div class="bolsa-icon">🌱</div>
+        <div class="bolsa-info">
+          <div class="title">Compostables — residuos orgánicos</div>
+          <div class="items">Yerba usada · café · cáscaras de frutas y verduras · restos vegetales · bolsitas de té · servilletas de papel sin químicos · hojas y pasto.</div>
+          <div class="no-list">No va: carne · lácteos · aceite · papel plastificado · residuos hospitalarios ni material contaminado.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card papel">
+        <div class="bolsa-icon">📄</div>
+        <div class="bolsa-info">
+          <div class="title">Papel limpio</div>
+          <div class="items">Hojas sueltas y folletos limpios · sin arrugar · sin ganchitos ni broches · sin restos de comida · sin plastificados · sin aluminio.</div>
+          <div class="no-list">No va: papel sucio · plastificado · aluminio · con restos de comida · con ganchitos.</div>
+        </div>
+      </div>
+
+      <div class="bolsa-card carton">
+        <div class="bolsa-icon">🗃️</div>
+        <div class="bolsa-info">
+          <div class="title">Cartón limpio</div>
+          <div class="items">Cajas de cartón limpias y aplastadas · rollos de cartón · cajas de medicamentos vacías y limpias.</div>
+          <div class="no-list">No va: cartón sucio · mojado · con restos de comida, grasa, sangre o fluidos.</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="section-title">Cómo retirar y transportar</div>
+    <div class="step-list">
+      <div class="step blue"><div class="step-num">1</div><div class="step-text">Usar guantes y EPP indicado.</div></div>
+      <div class="step blue"><div class="step-num">2</div><div class="step-text">Cerrar la bolsa en el lugar de generación. No trasvasar residuos.</div></div>
+      <div class="step blue"><div class="step-num">3</div><div class="step-text">Transportar en carro con tapa cerrada, sin desborde ni arrastre.</div></div>
+      <div class="step blue"><div class="step-num">4</div><div class="step-text">Lavarse las manos al terminar y después de retirar los guantes.</div></div>
+    </div>
+    <div class="alert danger" style="margin-top:10px">Descartar mal los residuos es una causa importante de accidentes. Separar bien protege a todas las personas de la cadena.</div>
+  </div>
+
+  <!-- MIS FUNCIONES -->
+  <div id="funciones" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">📋 Mis funciones</span>
+      <button class="audio-btn" onclick="speakScreen('funciones')">🔊</button>
+    </div>
+    <div class="alert info">Tareas del puesto Mucama de Limpieza · profesiograma oficial D07H120 · Secretaría de Salud Chubut.</div>
+    <a href="https://secretariadesalud.chubut.gov.ar/prophecyograms" target="_blank" style="display:block;background:var(--blue-bg);border:1px solid var(--blue-line);border-radius:var(--radius);padding:13px 14px;margin-bottom:12px;text-decoration:none;display:flex;align-items:center;gap:10px">
+      <span style="font-size:22px">🔗</span>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:var(--blue)">Ver profesiograma oficial</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">secretariadesalud.chubut.gov.ar</div>
+      </div>
+    </a>
+    <div class="section-title">Tareas del día a día</div>
+    <div class="funcion-card"><div class="funcion-num">1</div><div class="funcion-text">Limpiar y desinfectar el entorno del paciente: cama, barandas, colchón, mesa de luz, mesa de comer, sillas, mesadas, pie de suero, picaportes, interruptores y baño.</div></div>
+    <div class="funcion-card"><div class="funcion-num">2</div><div class="funcion-text">Limpiar habitaciones, baños, pasillos, consultorios, guardias, quirófanos, terapias y sectores asignados según protocolo y programación.</div></div>
+    <div class="funcion-card"><div class="funcion-num">3</div><div class="funcion-text">Usar método húmedo, doble balde y doble trapo. Los trapos del baño son exclusivos del baño.</div></div>
+    <div class="funcion-card"><div class="funcion-num">4</div><div class="funcion-text">Preparar y usar productos autorizados respetando dilución, tiempo de contacto, rotulado y fecha de preparación.</div></div>
+    <div class="funcion-card"><div class="funcion-num">5</div><div class="funcion-text">Separar y trasladar residuos correctamente. Retirar antes del desborde.</div></div>
+    <div class="funcion-card"><div class="funcion-num">6</div><div class="funcion-text">Usar el EPP correspondiente a la tarea y al cartel de aislamiento del sector.</div></div>
+    <div class="funcion-card"><div class="funcion-num">7</div><div class="funcion-text">Realizar higiene de manos al iniciar la jornada, al cambiar de tarea, después de manipular residuos, después de retirar guantes, antes y después de comer, al salir del baño y al finalizar.</div></div>
+    <div class="funcion-card"><div class="funcion-num">8</div><div class="funcion-text">Colocar cartel de piso húmedo y no obstaculizar la circulación de pacientes, personal ni equipos.</div></div>
+    <div class="funcion-card"><div class="funcion-num">9</div><div class="funcion-text">Reportar al superior: faltantes de insumos, EPP o productos; desperfectos edilicios; condiciones inseguras o riesgos.</div></div>
+    <div class="funcion-card"><div class="funcion-num">10</div><div class="funcion-text">Informar de inmediato cualquier accidente, pinchazo, corte, salpicadura, caída o exposición. Activar el circuito de accidentes.</div></div>
+    <button class="ver-mas-btn" onclick="toggleVerMas(this)">Ver más funciones ▼</button>
+    <div class="ver-mas-content">
+      <div class="section-title">En quirófano y áreas especiales</div>
+      <div class="funcion-card"><div class="funcion-num">11</div><div class="funcion-text">🚧 <strong>Quirófano — en construcción.</strong> El protocolo de limpieza está siendo definido. Seguir la indicación del referente del sector hasta que esté disponible.</div></div>
+      <div class="funcion-card"><div class="funcion-num">12</div><div class="funcion-text">En aislamiento: mirar el cartel antes de ingresar. Ver pantalla <strong>Aislamientos</strong> o consultar a enfermería si el EPP requerido no está claro.</div></div>
+      <div class="section-title">Capacitación y registros</div>
+      <div class="funcion-card"><div class="funcion-num">13</div><div class="funcion-text">Participar en las capacitaciones convocadas por HyS. Firmar asistencia y aplicar lo aprendido.</div></div>
+      <div class="funcion-card"><div class="funcion-num">14</div><div class="funcion-text">Cumplir cronogramas y planillas de registro de limpieza del sector.</div></div>
+      <div class="funcion-card"><div class="funcion-num">15</div><div class="funcion-text">Mantener uniforme limpio, cabello recogido, uñas cortas y limpias, sin joyas ni elementos que dificulten la higiene segura.</div></div>
+      <div class="funcion-card"><div class="funcion-num">16</div><div class="funcion-text">Mantener comunicación respetuosa con pacientes, acompañantes y equipo de salud. Preservar la discreción y confidencialidad.</div></div>
+      <div class="funcion-card"><div class="funcion-num">17</div><div class="funcion-text">Consultar ante cualquier duda antes de improvisar, especialmente con productos, aislamientos, residuos o accidentes.</div></div>
+      <div class="alert danger" style="margin-top:8px">No es función de mucamas/os realizar tareas sin capacitación, sin EPP, sin producto autorizado, sin indicación del sector o fuera de protocolo.</div>
+    </div>
+  </div>
+
+  <!-- ACCIDENTES -->
+  <div id="accidentes" class="screen">
+    <div class="screen-header">
+      <button class="back-btn" onclick="show('home')">← Volver</button>
+      <span class="screen-title">🚨 Accidentes</span>
+      <button class="audio-btn" onclick="speakScreen('accidentes')">🔊</button>
+    </div>
+    <div class="alert danger"><strong>Primero: detener la tarea, protegerse y avisar al superior inmediato.</strong></div>
+    <div class="section-title">Qué hacer — pasos inmediatos</div>
+    <div class="step-list">
+      <div class="step red"><div class="step-num">1</div><div class="step-text">Suspender la tarea y evitar que otra persona se exponga al mismo riesgo.</div></div>
+      <div class="step red"><div class="step-num">2</div><div class="step-text">Avisar de inmediato al superior del sector.</div></div>
+      <div class="step red"><div class="step-num">3</div><div class="step-text">Si requiere atención médica urgente: concurrir a guardia.</div></div>
+      <div class="step red"><div class="step-num">4</div><div class="step-text">Comunicarse con CeCAP para denuncia, urgencia y orientación.</div></div>
+      <div class="step red"><div class="step-num">5</div><div class="step-text">Completar el formulario de denuncia. Debe firmarlo el responsable del área.</div></div>
+      <div class="step red"><div class="step-num">6</div><div class="step-text">Registrar: fecha, hora, lugar, tarea, cómo ocurrió, lesión, EPP usado, testigos y elemento involucrado.</div></div>
+    </div>
+    <div class="section-title">Según el tipo</div>
+    <div class="step-list">
+      <div class="step red"><div class="step-num">💉</div><div class="step-text"><strong>Pinchazo o corte:</strong> retirar el guante, lavar con agua y jabón mínimo 5 minutos. No exprimir ni succionar. Ir a guardia de inmediato.</div></div>
+      <div class="step yellow"><div class="step-num">👁️</div><div class="step-text"><strong>Salpicadura en ojos o mucosas:</strong> lavar con agua abundante sin frotar. Ir a guardia.</div></div>
+      <div class="step blue"><div class="step-num">🧴</div><div class="step-text"><strong>Contacto con químico:</strong> en piel u ojos, lavar con agua abundante 15 minutos. Vapores: salir al aire fresco. Llevar el nombre del producto.</div></div>
+      <div class="step violet"><div class="step-num">🦵</div><div class="step-text"><strong>Caída, golpe o esfuerzo:</strong> no seguir trabajando. Avisar al superior. Si hay dolor fuerte, golpe en la cabeza o dificultad para moverse: pedir asistencia médica.</div></div>
+    </div>
+    <div class="alert warning" style="margin-top:4px"><strong>Accidente in itinere:</strong> si ocurre en el trayecto habitual entre domicilio y trabajo, avisar al superior y activar Autoseguro. Registrar hora, lugar, recorrido y medio de traslado.</div>
+    <div class="section-title">Autoseguro Público Provincial Chubut</div>
+    <div class="alert warning">⚠️ <strong>El tipo de cobertura depende de tu situación laboral.</strong><br>
+      El personal de planta tiene <strong>Autoseguro Público Provincial</strong>.<br>
+      El personal con seguro personal o ART (servicios tercerizados) debe seguir el circuito de su propia cobertura.<br>
+      Si no sabés cuál es tu cobertura, consultá a tu supervisor antes de un accidente.
+    </div>
+    <div class="autoseguro-header">
+      <div class="as-title">Autoseguro Público Provincial Chubut</div>
+      <div class="as-sub">Gobierno del Chubut · Denuncia de accidentes laborales</div>
+    </div>
+    <a class="tel-link" href="tel:08003481033">
+      <div class="contacto-card">
+        <div class="contacto-icon">📞</div>
+        <div class="contacto-info">
+          <div class="label">CeCAP — denuncias y urgencias (24 hs, todos los días)</div>
+          <div class="tel-pill verde">0800-348-1033</div>
+        </div>
+      </div>
+    </a>
+    <a class="tel-link" href="tel:08003455663">
+      <div class="contacto-card">
+        <div class="contacto-icon">📞</div>
+        <div class="contacto-info">
+          <div class="label">Centro de Atención al Asegurado</div>
+          <div class="tel-pill naranja">0800-345-5663</div>
+          <div class="sub">Lunes a viernes · 8:00 a 15:00</div>
+        </div>
+      </div>
+    </a>
+    <div class="contacto-card">
+      <div class="contacto-icon">✉️</div>
+      <div class="contacto-info">
+        <div class="label">Mail para denuncia de accidentes</div>
+        <a class="mail-link" href="mailto:denunciasaccidenteschubut@gmail.com">denunciasaccidenteschubut@gmail.com</a>
+      </div>
+    </div>
+    <div class="contacto-card">
+      <div class="contacto-icon">📍</div>
+      <div class="contacto-info">
+        <div class="label">Dirección</div>
+        <div class="value" style="font-size:13px;color:var(--ink)">Av. Juan Vucetich 191, Rawson, Chubut</div>
+      </div>
+    </div>
+    <div class="section-title">Consultas HyS</div>
+    <div class="contacto-card">
+      <div class="contacto-icon">✉️</div>
+      <div class="contacto-info">
+        <div class="label">Higiene y Seguridad · Lic. Belén Pellegrini</div>
+        <div class="label" style="margin-top:3px">Consultas sobre EPP, riesgos, productos, residuos o condiciones inseguras.</div>
+        <a class="mail-link" href="mailto:belenpellegrini.hys@gmail.com">belenpellegrini.hys@gmail.com</a>
+      </div>
+    </div>
+    <div class="section-title">Qué NO hacer</div>
+    <div class="step-list">
+      <div class="step red"><div class="step-num">✕</div><div class="step-text">No ocultar el accidente.</div></div>
+      <div class="step red"><div class="step-num">✕</div><div class="step-text">No seguir trabajando si hay lesión, exposición o síntomas.</div></div>
+      <div class="step red"><div class="step-num">✕</div><div class="step-text">No minimizar pinchazos, cortes, salpicaduras ni inhalación de vapores.</div></div>
+    </div>
+    <div class="alert info" style="margin-top:10px">En emergencias: asistencia médica primero, luego aviso al superior y activación del Autoseguro.</div>
+  </div>
+
+  <div class="footer">
+    <strong>Higiene y Seguridad Laboral · Lic. Belén Pellegrini · Uso institucional</strong>
+  </div>
+
+</div>
+
+<script>
+function show(id){
+  if('speechSynthesis' in window) window.speechSynthesis.cancel();
+  document.querySelectorAll('.home,.screen').forEach(el=>{
+    el.style.display='none';
+    el.classList.remove('active');
+  });
+  const target=document.getElementById(id);
+  if(target){
+    target.style.display='block';
+    target.classList.add('active');
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+}
+function speakScreen(id){
+  if(!('speechSynthesis' in window)){alert('Este navegador no permite lectura por voz.');return;}
+  window.speechSynthesis.cancel();
+  const target=document.getElementById(id);
+  let text=target.innerText.replace(/← Volver/g,'').replace(/🔊/g,'').replace(/Ver más funciones ▼/g,'').replace(/Ver menos ▲/g,'').replace(/\s+/g,' ').trim();
+  const u=new SpeechSynthesisUtterance(text);
+  u.lang='es-AR';u.rate=.85;
+  window.speechSynthesis.speak(u);
+}
+function toggleVerMas(btn){
+  const content=btn.nextElementSibling;
+  const isOpen=content.classList.contains('open');
+  content.classList.toggle('open');
+  btn.textContent=isOpen?'Ver más funciones ▼':'Ver menos ▲';
+}
+</script>
+</body>
+</html>
