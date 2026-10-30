@@ -1,7 +1,7 @@
 {
-  "name": "Limpieza y desinfección hospitalaria · HySL HZT / HMH",
+  "name": "Limpieza y desinfección hospitalaria · Higiene y Seguridad Laboral",
   "short_name": "Limpieza HySL",
-  "description": "Guía rápida de limpieza y desinfección hospitalaria para el trabajo seguro. Higiene y Seguridad Laboral · HZT / HMH.",
+  "description": "Guía rápida de limpieza y desinfección hospitalaria para el trabajo seguro. Higiene y Seguridad Laboral.",
   "lang": "es-AR",
   "start_url": "./",
   "scope": "./",
