@@ -1,0 +1,17 @@
+{
+  "name": "Limpieza y desinfección hospitalaria · HySL HZT / HMH",
+  "short_name": "Limpieza HySL",
+  "description": "Guía rápida de limpieza y desinfección hospitalaria para el trabajo seguro. Higiene y Seguridad Laboral · HZT / HMH.",
+  "lang": "es-AR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F3F7F9",
+  "theme_color": "#0D313F",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
