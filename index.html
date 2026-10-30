@@ -868,25 +868,16 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     <span class="screen-title"><svg class="ms" aria-hidden="true"><use href="#i-help"/></svg>Ayuda</span>
     <button class="audio-btn" onclick="speakScreen('ayuda')" aria-label="Escuchar"><svg class="ms" aria-hidden="true"><use href="#i-volume_up"/></svg></button>
   </div>
-  <div class="section-title">Para quien usa la guía</div>
   <div class="step-list">
     <div class="step"><div class="step-num"><svg class="ms" aria-hidden="true"><use href="#i-touch_app"/></svg></div><div class="step-text">Tocá un botón del inicio para abrir el tema. Con <strong>Volver</strong> regresás.</div></div>
     <div class="step"><div class="step-num"><svg class="ms" aria-hidden="true"><use href="#i-volume_up"/></svg></div><div class="step-text">El botón del parlante <strong>lee en voz alta</strong> la pantalla. Tocalo otra vez o cambiá de pantalla para que se detenga.</div></div>
-    <div class="step"><div class="step-num"><svg class="ms" aria-hidden="true"><use href="#i-calculate"/></svg></div><div class="step-text">La <strong>Calculadora</strong> te dice cuántos mililitros de lavandina poner según la etiqueta, el uso y los litros de agua.</div></div>
+    <div class="step"><div class="step-num"><svg class="ms" aria-hidden="true"><use href="#i-calculate"/></svg></div><div class="step-text">La <strong>Calculadora</strong> te dice cuántos mililitros de lavandina poner según la etiqueta, la concentración y los litros de agua.</div></div>
     <div class="step"><div class="step-num"><svg class="ms" aria-hidden="true"><use href="#i-download"/></svg></div><div class="step-text"><strong>Instalarla como app:</strong> en Android (Chrome), tocar el botón <strong>Instalar en el celular</strong> del inicio, o el menú ⋮ → <strong>Instalar app</strong> / <strong>Agregar a la pantalla principal</strong>. En iPhone (Safari), tocar el botón <strong>Compartir</strong> → <strong>Agregar a inicio</strong>. Queda un ícono como el de cualquier aplicación.</div></div>
     <div class="step"><div class="step-num"><svg class="ms" aria-hidden="true"><use href="#i-mobile"/></svg></div><div class="step-text">Una vez instalada, se abre sin necesidad de internet. Cuando hay conexión, se actualiza sola con la última versión publicada.</div></div>
     <div class="step"><div class="step-num"><svg class="ms" aria-hidden="true"><use href="#i-priority_high"/></svg></div><div class="step-text">Si algo de la guía no coincide con el cartel de la puerta o con lo que indica el sector, <strong>se sigue la indicación del sector</strong> y se avisa a Higiene y Seguridad Laboral.</div></div>
     <div class="step"><div class="step-num"><svg class="ms" aria-hidden="true"><use href="#i-mail"/></svg></div><div class="step-text">Consultas y sugerencias: <a class="mail-link" href="mailto:belenpellegrini.hys@gmail.com">belenpellegrini.hys@gmail.com</a></div></div>
   </div>
-  <div class="section-title">Para la administración (HySL)</div>
-  <div class="step-list">
-    <div class="step"><div class="step-num">1</div><div class="step-text">El contenido de la guía está en un solo archivo, <strong>index.html</strong>, en el repositorio <em>app_limpieza</em> de GitHub. Se publica sola en GitHub Pages unos minutos después de guardar. Los archivos <strong>manifest.webmanifest</strong>, <strong>sw.js</strong> y la carpeta <strong>icons</strong> son los que permiten instalarla como app: no hace falta tocarlos para cambiar textos.</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-text">Cada pantalla es un bloque <code>&lt;div id="..." class="screen"&gt;</code> con un comentario arriba (por ejemplo, <code>&lt;!-- DERRAMES --&gt;</code>). Para cambiar un texto, se busca y se reemplaza dentro de ese bloque.</div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-text">Los valores de la calculadora (concentraciones y litros) están en las listas de la pantalla <em>Calculadora</em>. Si cambia la lavandina que se compra, agregar su g/L como nueva opción.</div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-text">Cada pantalla cierra con su <strong>Fuente</strong>. Si se cambia un dato técnico, actualizar también la fuente.</div></div>
-    <div class="step"><div class="step-num">5</div><div class="step-text">Después de cada cambio, actualizar el manual de usuario de la guía.</div></div>
   </div>
-</div>
 
 <!-- ===================== FUENTES ===================== -->
 <div id="fuentes" class="screen">
