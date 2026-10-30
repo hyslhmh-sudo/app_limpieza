@@ -486,7 +486,7 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     <button class="back-btn" onclick="show('home')"><svg class="ms" aria-hidden="true"><use href="#i-arrow_back"/></svg>Volver</button>
     <span class="screen-title"><svg class="ms" aria-hidden="true"><use href="#i-calculate"/></svg>Calculadora</span>
   </div>
-  <div class="alert info">Elegí lo que dice la etiqueta, para qué es y cuánta agua vas a preparar.</div>
+  <div class="alert info">Elegí lo que dice la etiqueta, la concentración que necesitás y cuánta agua vas a preparar. Esta guía recomienda <strong>1000 ppm</strong> para superficies y <strong>5000 ppm</strong> para derrames; las demás concentraciones, solo si las indica el sector.</div>
   <div class="calc">
     <label for="c-prod">1. ¿Cuánto cloro dice la etiqueta?</label>
     <select id="c-prod" onchange="calcular()">
@@ -496,10 +496,13 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
       <option value="otro">Otro valor…</option>
     </select>
     <input id="c-otro" type="number" inputmode="decimal" min="1" step="0.1" placeholder="Escribí los g/L de la etiqueta" style="display:none;margin-top:6px" oninput="calcular()">
-    <label for="c-uso">2. ¿Para qué es?</label>
+    <label for="c-uso">2. ¿Qué concentración necesitás?</label>
     <select id="c-uso" onchange="calcular()">
-      <option value="1000" selected>Superficies (1000 ppm)</option>
-      <option value="5000">Derrames o C. difficile (5000 ppm)</option>
+      <option value="100">100 ppm</option>
+      <option value="200">200 ppm</option>
+      <option value="500">500 ppm</option>
+      <option value="1000" selected>1000 ppm · superficies</option>
+      <option value="5000">5000 ppm · derrames o C. difficile</option>
     </select>
     <label for="c-vol">3. ¿Cuántos litros vas a preparar?</label>
     <select id="c-vol" onchange="calcular()">
