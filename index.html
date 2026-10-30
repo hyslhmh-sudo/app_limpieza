@@ -126,6 +126,24 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
 .box.amarillo{border-color:var(--yel-line);background:var(--yel-bg)} .box.amarillo h3,.box.amarillo .intro{color:var(--yel)}
 .box.verde{border-color:var(--grn-line);background:var(--grn-bg)} .box.verde h3,.box.verde .intro{color:var(--grn)}
 .box.azul{border-color:var(--patagonia-medio);background:var(--patagonia-claro)} .box.azul h3,.box.azul .intro{color:var(--humphreys)}
+
+/* Colores de carteles de aislamiento (modelos Res. MSAL 4221/2023, Anexo VI) */
+.c-amarillo{--c-bg:#FFF8C7;--c-line:#E6CF2E;--c-ink:#5C4D00;--c-chip:#F5E04A}
+.c-ambar{--c-bg:#FFEBB8;--c-line:#F2A900;--c-ink:#6B4300;--c-chip:#FFB800}
+.c-violeta{--c-bg:#ECE6FC;--c-line:#6A4BE0;--c-ink:#3415A6;--c-chip:#4A1FD6}
+.c-verde{--c-bg:#E3F3EA;--c-line:#3E9E68;--c-ink:#145A33;--c-chip:#2E8B57}
+.box.c-amarillo,.box.c-ambar,.box.c-violeta,.box.c-verde{background:var(--c-bg);border-color:var(--c-line);color:var(--c-ink)}
+.box.c-amarillo h3,.box.c-ambar h3,.box.c-violeta h3,.box.c-verde h3,.box.c-amarillo .intro,.box.c-ambar .intro,.box.c-violeta .intro,.box.c-verde .intro{color:var(--c-ink)}
+.box .cartel{display:inline-block;background:var(--c-chip);color:#fff;font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;margin-bottom:8px;letter-spacing:.3px}
+.box.c-amarillo .cartel,.box.c-ambar .cartel{color:var(--c-ink)}
+.box.estandar{background:#fff;border-color:var(--patagonia-medio)} .box.estandar h3,.box.estandar .intro{color:var(--humphreys)}
+.step.c-amarillo,.step.c-ambar,.step.c-violeta,.step.c-verde{background:var(--c-bg);border-color:var(--c-line)}
+.step.c-amarillo .step-num,.step.c-ambar .step-num,.step.c-violeta .step-num,.step.c-verde .step-num{background:var(--c-chip);color:#fff}
+.step.c-amarillo .step-num{color:var(--c-ink)}
+.step.c-amarillo .step-text,.step.c-ambar .step-text,.step.c-violeta .step-text,.step.c-verde .step-text{color:var(--c-ink)}
+.leyenda{display:flex;flex-direction:column;gap:6px}
+.ley{display:flex;align-items:center;gap:10px;background:var(--c-bg);border:1px solid var(--c-line);border-radius:12px;padding:9px 12px;font-size:14px;color:var(--c-ink)}
+.ley .chip{width:26px;height:26px;border-radius:7px;background:var(--c-chip);flex-shrink:0}
 .box ul{padding-left:18px;font-size:14px;line-height:1.5}
 .box li{margin-bottom:4px}
 
@@ -600,20 +618,29 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     <span class="screen-title"><svg class="ms" aria-hidden="true"><use href="#i-door_front"/></svg>Aislamientos</span>
     <button class="audio-btn" onclick="speakScreen('aislamientos')" aria-label="Escuchar"><svg class="ms" aria-hidden="true"><use href="#i-volume_up"/></svg></button>
   </div>
-  <div class="alert warning">Antes de entrar: <strong>leer el cartel</strong>, ponerse el EPP indicado y cerrar la puerta al salir. Si el cartel no se entiende, no entrar y consultar a enfermería.</div>
+  <div class="alert warning">Antes de entrar: <strong>mirar el color del cartel de la puerta</strong>, ponerse el EPP indicado y cerrar la puerta al salir. Si el cartel no se entiende, no entrar y consultar a enfermería.</div>
+
+  <div class="section-title">Colores de los carteles</div>
+  <div class="leyenda">
+    <div class="ley c-amarillo"><span class="chip"></span><div><strong>Amarillo</strong> · Precauciones de contacto</div></div>
+    <div class="ley c-ambar"><span class="chip"></span><div><strong>Amarillo anaranjado</strong> · Contacto / esporas (<em>C. difficile</em>)</div></div>
+    <div class="ley c-violeta"><span class="chip"></span><div><strong>Violeta</strong> · Precauciones por gotitas</div></div>
+    <div class="ley c-verde"><span class="chip"></span><div><strong>Verde</strong> · Precauciones por transmisión aérea</div></div>
+  </div>
+  <div class="alert info" style="margin-top:8px">Son los colores de los carteles modelo del Ministerio de Salud de la Nación. Las precauciones estándar no llevan cartel: se aplican siempre, con todos los pacientes. Si el cartel de tu hospital tiene otro color, vale lo que dice el cartel.</div>
 
   <div class="section-title">En qué orden limpiar las habitaciones</div>
   <div class="step-list">
-    <div class="step grn"><div class="step-num">1</div><div class="step-text">Pacientes con defensas bajas (neutropénicos).</div></div>
-    <div class="step grn"><div class="step-num">2</div><div class="step-text">Habitaciones sin aislamiento.</div></div>
-    <div class="step yel"><div class="step-num">3</div><div class="step-text">Aislamiento respiratorio (aéreo).</div></div>
-    <div class="step yel"><div class="step-num">4</div><div class="step-text">Aislamiento por gotas.</div></div>
-    <div class="step red"><div class="step-num">5</div><div class="step-text">Aislamiento de contacto, al final.</div></div>
+    <div class="step"><div class="step-num">1</div><div class="step-text">Pacientes con defensas bajas (neutropénicos).</div></div>
+    <div class="step"><div class="step-num">2</div><div class="step-text">Habitaciones sin aislamiento.</div></div>
+    <div class="step c-verde"><div class="step-num">3</div><div class="step-text">Cartel <strong>verde</strong>: transmisión aérea.</div></div>
+    <div class="step c-violeta"><div class="step-num">4</div><div class="step-text">Cartel <strong>violeta</strong>: gotitas.</div></div>
+    <div class="step c-amarillo"><div class="step-num">5</div><div class="step-text">Cartel <strong>amarillo</strong> o <strong>amarillo anaranjado</strong>: contacto, al final.</div></div>
   </div>
   <div class="alert info" style="margin-top:8px">Cambiar paños y mopas después de cada habitación con aislamiento.</div>
 
-  <div class="box rojo">
-    <h3><svg class="ms" aria-hidden="true"><use href="#i-shield"/></svg>Precauciones estándar</h3>
+  <div class="box estandar">
+    <h3><svg class="ms" aria-hidden="true"><use href="#i-shield"/></svg>Precauciones estándar · sin cartel</h3>
     <div class="intro">Para todos los pacientes, siempre.</div>
     <ul>
       <li>Guantes y protección ocular para limpiar.</li>
@@ -622,8 +649,9 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     </ul>
   </div>
 
-  <div class="box amarillo">
-    <h3><svg class="ms" aria-hidden="true"><use href="#i-back_hand"/></svg>Aislamiento de contacto</h3>
+  <div class="box c-amarillo">
+    <div class="cartel">Cartel amarillo</div>
+    <h3><svg class="ms" aria-hidden="true"><use href="#i-back_hand"/></svg>Precauciones de contacto</h3>
     <div class="intro">Gérmenes que pasan al tocar al paciente o las superficies. Por ejemplo, bacterias multirresistentes (como SAMR o ERV).</div>
     <ul>
       <li><strong>Camisolín y guantes</strong> antes de entrar.</li>
@@ -633,8 +661,9 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     </ul>
   </div>
 
-  <div class="box amarillo">
-    <h3><svg class="ms" aria-hidden="true"><use href="#i-coronavirus"/></svg>Contacto por <em>C. difficile</em></h3>
+  <div class="box c-ambar">
+    <div class="cartel">Cartel amarillo anaranjado</div>
+    <h3><svg class="ms" aria-hidden="true"><use href="#i-coronavirus"/></svg>Contacto / esporas (<em>C. difficile</em>)</h3>
     <div class="intro">Diarrea por una bacteria que forma esporas: resiste al alcohol y a muchos desinfectantes.</div>
     <ul>
       <li>Camisolín y guantes, como en contacto.</li>
@@ -644,8 +673,9 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     </ul>
   </div>
 
-  <div class="box verde">
-    <h3><svg class="ms" aria-hidden="true"><use href="#i-sick"/></svg>Aislamiento por gotas</h3>
+  <div class="box c-violeta">
+    <div class="cartel">Cartel violeta</div>
+    <h3><svg class="ms" aria-hidden="true"><use href="#i-sick"/></svg>Precauciones por gotitas</h3>
     <div class="intro">Gotas que salen al hablar, toser o estornudar y caen cerca (menos de un metro). Por ejemplo, gripe, coqueluche, paperas, meningitis bacteriana.</div>
     <ul>
       <li><strong>Barbijo quirúrgico y protección ocular</strong> antes de entrar.</li>
@@ -654,8 +684,9 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     </ul>
   </div>
 
-  <div class="box azul">
-    <h3><svg class="ms" aria-hidden="true"><use href="#i-air"/></svg>Aislamiento aéreo</h3>
+  <div class="box c-verde">
+    <div class="cartel">Cartel verde</div>
+    <h3><svg class="ms" aria-hidden="true"><use href="#i-air"/></svg>Precauciones por transmisión aérea</h3>
     <div class="intro">Partículas muy chicas que quedan flotando en el aire. Por ejemplo, tuberculosis, sarampión, varicela.</div>
     <ul>
       <li><strong>Respirador N95</strong> colocado antes de abrir la puerta (no es lo mismo que el barbijo quirúrgico).</li>
@@ -670,7 +701,7 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     <div class="step"><div class="step-num">2</div><div class="step-text">Llevar la ropa sucia en el carro de ropa sucia. Nunca en el mismo carro que la ropa limpia.</div></div>
     <div class="step"><div class="step-num">3</div><div class="step-text">Camisolín y guantes descartables usados: en <strong>bolsa roja</strong>, dentro de la habitación, antes de salir.</div></div>
   </div>
-  <div class="fuente"><strong>Fuente:</strong> Res. MSAL 4221/2023, Anexo VI (Buenas prácticas para la gestión de medidas de precaución basadas en los mecanismos de transmisión) y Anexo IV (orden de limpieza y EPP); INE-ADECI-SADI (2021), <em>C. difficile</em>; MSAL (2025), Directrices para lavaderos sanitarios (ropa sucia).</div>
+  <div class="fuente"><strong>Fuente:</strong> Res. MSAL 4221/2023, Anexo VI (Buenas prácticas para la gestión de medidas de precaución basadas en los mecanismos de transmisión; colores según los carteles modelo de sus anexos 5 a 8) y Anexo IV (orden de limpieza y EPP); INE-ADECI-SADI (2021), <em>C. difficile</em>; MSAL (2025), Directrices para lavaderos sanitarios (ropa sucia).</div>
 </div>
 
 <!-- ===================== QUIRÓFANO ===================== -->
