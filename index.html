@@ -73,6 +73,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--ink);min-height:10
 .alert.info{background:var(--patagonia-claro);color:var(--humphreys);border-color:var(--patagonia-medio)}
 .clave{background:var(--humphreys);color:#fff;border-radius:var(--radius);padding:14px 16px;font-size:16px;line-height:1.55;margin-bottom:12px}
 .clave strong{color:#fff}
+.lugares{margin:8px 0 4px 18px;padding:0;font-size:14px;line-height:1.5;color:var(--ink)}
+.clave{background:var(--humphreys);color:#fff;border-radius:var(--radius);padding:14px 16px;font-size:16px;line-height:1.55;margin-bottom:12px}
+.clave strong{color:#fff}
 .section-title{font-size:12px;font-weight:800;color:var(--patagonia);text-transform:uppercase;letter-spacing:.6px;margin:18px 0 8px}
 
 .step-list{display:flex;flex-direction:column;gap:8px}
@@ -266,36 +269,59 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     <span class="screen-title"><svg class="ms" aria-hidden="true"><use href="#i-map"/></svg>Cada lugar</span>
     <button class="audio-btn" onclick="speakScreen('areas')" aria-label="Escuchar"><svg class="ms" aria-hidden="true"><use href="#i-volume_up"/></svg></button>
   </div>
-  <div class="clave">En todos los lugares se desinfecta igual: <strong>lavandina a 1000 ppm</strong>.<br>Lo que cambia es <strong>cuántas veces</strong> se limpia.</div>
+  <div class="clave">El Ministerio de Salud divide los lugares del hospital en <strong>3 grupos</strong>, según el riesgo de contagio.<br>Buscá tu lugar en la lista y tocá el grupo para ver cómo se limpia.</div>
   <button class="area-btn" onclick="show('area-critica')">
     <div class="area-dot" style="background:#C94040"></div>
-    <div class="area-info"><div class="name">Lugares de mucho riesgo</div><div class="desc">Quirófano, terapia, neonatología, partos, diálisis, laboratorio, hemoterapia, esterilización, farmacia, lactario, cocina de nutrición, lavadero (zona sucia) y habitaciones con cartel.</div><span class="badge rojo">2 veces por día</span></div>
+    <div class="area-info"><div class="name">Áreas críticas · mucho riesgo</div><div class="desc">Donde hay más riesgo de contagio, donde se hacen procedimientos de riesgo (haya o no pacientes) o donde hay pacientes con defensas bajas.</div>
+    <ul class="lugares"><li>Quirófanos (centro quirúrgico)</li><li>Sala de partos (centro obstétrico)</li><li>Terapia intensiva (adultos, pediatría y neonatología)</li><li>Diálisis</li><li>Laboratorio de análisis clínicos</li><li>Banco de sangre</li><li>Hemodinamia</li><li>Unidad de trasplante</li><li>Unidad de quemados</li><li>Habitaciones de aislamiento (con cartel)</li><li>Esterilización</li><li>Lactario</li><li>Servicio de nutrición y dietética</li><li>Farmacia</li><li>Lavadero: zona sucia</li></ul></div>
   </button>
   <button class="area-btn" onclick="show('area-semi')">
     <div class="area-dot" style="background:#D9982B"></div>
-    <div class="area-info"><div class="name">Internación y consultorios</div><div class="desc">Salas de internación, consultorios, office de enfermería y baños.</div><span class="badge amarillo">1 o 2 veces por día</span></div>
+    <div class="area-info"><div class="name">Áreas semicríticas · riesgo medio</div><div class="desc">Las salas con pacientes internados que no tienen una infección que se contagia fácil.</div>
+    <ul class="lugares"><li>Salas de internación</li><li>Office de enfermería</li><li>Consultorios externos</li><li>Baños</li></ul></div>
   </button>
   <button class="area-btn" onclick="show('area-nocritica')">
     <div class="area-dot" style="background:#5E9A3A"></div>
-    <div class="area-info"><div class="name">Oficinas y depósitos</div><div class="desc">Oficinas, administración, vestuarios y depósitos.</div><span class="badge verde">Agua y detergente</span></div>
+    <div class="area-info"><div class="name">Áreas no críticas · poco riesgo</div><div class="desc">Todos los demás lugares: no hay pacientes y no se hacen procedimientos de riesgo.</div>
+    <ul class="lugares"><li>Vestuarios</li><li>Oficinas</li><li>Áreas administrativas</li><li>Secretaría</li><li>Depósitos (almacenes)</li><li>Cuarto de costura</li><li>Cocina</li></ul></div>
   </button>
-  <div class="alert danger" style="margin-top:10px">Si hay <strong>sangre, vómito u otro líquido del cuerpo</strong>, en cualquier lugar: ver <strong>Sangre o vómito</strong>.</div>
-  <div class="fuente"><strong>De dónde sale:</strong> Res. MSAL 4221/2023, Anexo IV (apartado 2.b, tipos de áreas; 2.c y 3.a, frecuencias; anexo 16, 0,1 %).</div>
+  <div class="alert info" style="margin-top:10px">Si tu lugar no está en la lista, preguntá a tu supervisor en qué grupo está.</div>
+  <div class="alert danger">Si hay <strong>sangre, vómito u otro líquido del cuerpo</strong>, en cualquier lugar: ver <strong>Sangre o vómito</strong>.</div>
+  <div class="fuente"><strong>De dónde sale:</strong> Res. MSAL 4221/2023, Anexo IV, apartado 2.b (clasificación de las áreas).</div>
 </div>
 
 <div id="area-critica" class="screen">
   <div class="screen-header">
     <button class="back-btn" onclick="show('areas')"><svg class="ms" aria-hidden="true"><use href="#i-arrow_back"/></svg>Volver</button>
-    <span class="screen-title">Lugares de mucho riesgo</span>
+    <span class="screen-title">Áreas críticas</span>
     <button class="audio-btn" onclick="speakScreen('area-critica')" aria-label="Escuchar"><svg class="ms" aria-hidden="true"><use href="#i-volume_up"/></svg></button>
   </div>
   <div class="alert danger">Entrá solo con la protección que te indican y con permiso del sector.</div>
-  <div class="clave"><strong>2 veces por día</strong> y cada vez que haga falta.<br>Limpieza <strong>a fondo</strong> cuando el paciente se va.</div>
+  <div class="section-title">Terapia intensiva (adultos, pediatría y neonatología)</div>
   <div class="step-list">
-    <div class="step "><div class="step-num">1</div><div class="step-text">Limpiar, enjuagar y desinfectar con lavandina a <strong>1000 ppm</strong> (o el producto que da el sector).</div></div>
-    <div class="step "><div class="step-num">2</div><div class="step-text"><strong>Sala de partos y diálisis:</strong> antes y después de cada paciente.</div></div>
-    <div class="step "><div class="step-num">3</div><div class="step-text"><strong>Una vez por semana:</strong> paredes, estantes altos y rejillas.</div></div>
-    <div class="step "><div class="step-num">4</div><div class="step-text">Acá no puede haber alfombras ni sillones de tela. Si ves alguno, avisá.</div></div>
+    <div class="step red"><div class="step-num">1</div><div class="step-text"><strong>2 veces por día</strong> y cada vez que haga falta.</div></div>
+    <div class="step red"><div class="step-num">2</div><div class="step-text">Limpiar y desinfectar lo que más se toca.</div></div>
+    <div class="step red"><div class="step-num">3</div><div class="step-text">Piso: con agua y detergente.</div></div>
+    <div class="step red"><div class="step-num">4</div><div class="step-text">En la última limpieza del día, también lo que casi no se toca.</div></div>
+    <div class="step red"><div class="step-num">5</div><div class="step-text">Limpieza <strong>a fondo</strong> cuando el paciente se va (alta o traslado).</div></div>
+    <div class="step red"><div class="step-num">6</div><div class="step-text">Paredes, techos y lo que casi no se toca: de forma programada (por ejemplo, 1 vez por semana) y cuando esté sucio.</div></div>
+  </div>
+  <div class="section-title">Sala de partos, diálisis y unidad de quemados</div>
+  <div class="step-list">
+    <div class="step red"><div class="step-num">1</div><div class="step-text"><strong>Antes y después de cada paciente</strong>, y como mínimo 1 vez por día.</div></div>
+    <div class="step red"><div class="step-num">2</div><div class="step-text">Limpiar y desinfectar lo que más se toca, todo el puesto del paciente y el piso.</div></div>
+    <div class="step red"><div class="step-num">3</div><div class="step-text">Cualquier lugar con sangre o líquidos del cuerpo (también paredes).</div></div>
+    <div class="step red"><div class="step-num">4</div><div class="step-text">Sacar la ropa sucia y la basura.</div></div>
+  </div>
+  <div class="section-title">Quirófano</div>
+  <button class="area-btn" onclick="show('quirofano')"><div class="area-info"><div class="name"><svg class="ms" aria-hidden="true"><use href="#i-medical_services"/></svg> Ver pantalla Quirófano</div><div class="desc">Antes de la primera cirugía, entre cirugías y al final del día.</div></div></button>
+  <div class="section-title">Habitaciones de aislamiento</div>
+  <button class="area-btn" onclick="show('aislamientos')"><div class="area-info"><div class="name"><svg class="ms" aria-hidden="true"><use href="#i-door_front"/></svg> Ver pantalla Carteles en la puerta</div><div class="desc">Qué ponerte y cómo limpiar según el color del cartel.</div></div></button>
+  <div class="section-title">Laboratorio, banco de sangre, hemodinamia, trasplante, esterilización, lactario, nutrición, farmacia y lavadero (zona sucia)</div>
+  <div class="alert info">La norma no fija cuántas veces por día en estos lugares. Lo fija <strong>el cronograma de limpieza de tu hospital</strong> para cada sector. Preguntá a tu supervisor.</div>
+  <div class="section-title">En todas las áreas críticas</div>
+  <div class="step-list">
+    <div class="step "><div class="step-num">1</div><div class="step-text">No puede haber alfombras, muebles de tela ni tapizados. Si ves alguno, avisá.</div></div>
   </div>
   <div class="section-title">Incubadoras (neonatología)</div>
   <div class="alert info">Solo si el sector te dice que esta tarea es tuya (a veces la hace enfermería).</div>
@@ -308,37 +334,58 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     <div class="step red"><div class="step-num">6</div><div class="step-text">Dejala secar bien y anotá fecha, hora y quién la limpió.</div></div>
   </div>
   <div class="alert danger" style="margin-top:10px"><strong>Nunca alcohol</strong> en las paredes de la incubadora: daña el plástico y le hace mal al bebé.</div>
-  <div class="fuente"><strong>De dónde sale:</strong> Res. MSAL 4221/2023, Anexo IV; SADI (2025), limpieza y desinfección de incubadoras.</div>
+  <div class="fuente"><strong>De dónde sale:</strong> Res. MSAL 4221/2023, Anexo IV (apartado 2.b; apartado 3.a; tabla de áreas especializadas, apartado 3.c); SADI (2025), limpieza y desinfección de incubadoras.</div>
 </div>
 
 <div id="area-semi" class="screen">
   <div class="screen-header">
     <button class="back-btn" onclick="show('areas')"><svg class="ms" aria-hidden="true"><use href="#i-arrow_back"/></svg>Volver</button>
-    <span class="screen-title">Internación y consultorios</span>
+    <span class="screen-title">Áreas semicríticas</span>
     <button class="audio-btn" onclick="speakScreen('area-semi')" aria-label="Escuchar"><svg class="ms" aria-hidden="true"><use href="#i-volume_up"/></svg></button>
   </div>
+  <div class="section-title">Salas de internación</div>
   <div class="step-list">
-    <div class="step yel"><div class="step-num">1</div><div class="step-text"><strong>Salas de internación:</strong> 2 veces por día. Limpieza a fondo cuando el paciente se va.</div></div>
-    <div class="step yel"><div class="step-num">2</div><div class="step-text"><strong>Consultorios:</strong> 2 veces por día. El piso, al terminar el día.</div></div>
-    <div class="step yel"><div class="step-num">3</div><div class="step-text"><strong>Baño de la habitación:</strong> 1 vez por día. <strong>Baños compartidos:</strong> 2 veces por día y cuando haga falta.</div></div>
-    <div class="step yel"><div class="step-num">4</div><div class="step-text">Desinfectar con lavandina a <strong>1000 ppm</strong> lo que más se toca y el baño.</div></div>
+    <div class="step yel"><div class="step-num">1</div><div class="step-text">Como mínimo <strong>2 veces por día</strong> y cada vez que haga falta.</div></div>
+    <div class="step yel"><div class="step-num">2</div><div class="step-text">Lo que más se toca cerca del paciente, la pileta y el piso.</div></div>
+    <div class="step yel"><div class="step-num">3</div><div class="step-text">Limpieza <strong>a fondo</strong> cuando el paciente se va (alta o traslado): colchón, cama, estantes, rejillas, todo lo que se toca y lo que casi no se toca, pileta y piso.</div></div>
+    <div class="step yel"><div class="step-num">4</div><div class="step-text">Lo que casi no se toca: de forma programada (por ejemplo, 1 vez por semana).</div></div>
   </div>
-  <div class="fuente"><strong>De dónde sale:</strong> Res. MSAL 4221/2023, Anexo IV.</div>
+  <div class="section-title">Consultorios externos</div>
+  <div class="step-list">
+    <div class="step yel"><div class="step-num">1</div><div class="step-text">Como mínimo <strong>2 veces por día</strong>. En pediatría, después de cada paciente.</div></div>
+    <div class="step yel"><div class="step-num">2</div><div class="step-text">Lo que más se toca: con agua y detergente.</div></div>
+    <div class="step yel"><div class="step-num">3</div><div class="step-text">Última limpieza del día: todo el piso con agua y detergente.</div></div>
+    <div class="step yel"><div class="step-num">4</div><div class="step-text">Lo que casi no se toca: de forma programada.</div></div>
+  </div>
+  <div class="section-title">Baños</div>
+  <div class="step-list">
+    <div class="step yel"><div class="step-num">1</div><div class="step-text"><strong>Baño de la habitación:</strong> 1 vez por día.</div></div>
+    <div class="step yel"><div class="step-num">2</div><div class="step-text"><strong>Baños compartidos o públicos:</strong> 2 veces por día y cada vez que haga falta.</div></div>
+    <div class="step yel"><div class="step-num">3</div><div class="step-text">Limpiar y desinfectar: pileta, canillas, manijas, picaportes, asiento del inodoro y piso.</div></div>
+    <div class="step yel"><div class="step-num">4</div><div class="step-text">Lo que casi no se toca: de forma programada (por ejemplo, 1 vez por semana).</div></div>
+  </div>
+  <div class="section-title">Office de enfermería</div>
+  <div class="alert info">La norma no fija cuántas veces. Lo fija <strong>el cronograma de limpieza de tu hospital</strong>. Preguntá a tu supervisor.</div>
+  <div class="section-title">Pisos de las zonas de pacientes</div>
+  <div class="step-list">
+    <div class="step yel"><div class="step-num">1</div><div class="step-text">Como mínimo <strong>1 vez por día</strong>, siempre al final, haciendo una "S".</div></div>
+  </div>
+  <div class="fuente"><strong>De dónde sale:</strong> Res. MSAL 4221/2023, Anexo IV (apartado 2.b; apartado 3.a; tabla de áreas especializadas, apartado 3.c).</div>
 </div>
 
 <div id="area-nocritica" class="screen">
   <div class="screen-header">
     <button class="back-btn" onclick="show('areas')"><svg class="ms" aria-hidden="true"><use href="#i-arrow_back"/></svg>Volver</button>
-    <span class="screen-title">Oficinas y depósitos</span>
+    <span class="screen-title">Áreas no críticas</span>
     <button class="audio-btn" onclick="speakScreen('area-nocritica')" aria-label="Escuchar"><svg class="ms" aria-hidden="true"><use href="#i-volume_up"/></svg></button>
   </div>
   <div class="step-list">
-    <div class="step grn"><div class="step-num">1</div><div class="step-text">Limpiar con <strong>agua y detergente</strong>, según el horario del sector.</div></div>
-    <div class="step grn"><div class="step-num">2</div><div class="step-text">Picaportes, barandas, mostradores y botones del ascensor: todos los días.</div></div>
-    <div class="step grn"><div class="step-num">3</div><div class="step-text">Vidrios, paredes y estantes: cada semana o cada mes.</div></div>
+    <div class="step grn"><div class="step-num">1</div><div class="step-text">Limpiar con <strong>agua y detergente</strong>.</div></div>
+    <div class="step grn"><div class="step-num">2</div><div class="step-text">Cuántas veces: lo fija <strong>el cronograma de limpieza de tu hospital</strong> para cada lugar.</div></div>
+    <div class="step grn"><div class="step-num">3</div><div class="step-text">Si algo está sucio con sangre o líquidos del cuerpo: limpiar y desinfectar enseguida (ver <strong>Sangre o vómito</strong>).</div></div>
   </div>
-  <div class="alert warning" style="margin-top:10px">Si hay sangre o vómito: ver <strong>Sangre o vómito</strong>.</div>
-  <div class="fuente"><strong>De dónde sale:</strong> Res. MSAL 4221/2023, Anexo IV.</div>
+  <div class="alert warning" style="margin-top:10px"><strong>Ojo:</strong> la <strong>cocina</strong> es área no crítica, pero el <strong>servicio de nutrición y dietética</strong> es área crítica. Si no sabés en cuál estás, preguntá.</div>
+  <div class="fuente"><strong>De dónde sale:</strong> Res. MSAL 4221/2023, Anexo IV (apartado 2.b; apartado 2.c, limpieza programada con detergente neutro y agua).</div>
 </div>
 
 <!-- ===================== FRECUENCIAS ===================== -->
@@ -359,7 +406,7 @@ table.tabla{width:100%;border-collapse:collapse;background:#fff;border:1px solid
     <tr><th>Lugar</th><th>Cuántas veces</th></tr>
     <tr><td><strong>Terapia y neonatología</strong></td><td>2 veces por día, y a fondo cuando el paciente se va</td></tr>
     <tr><td><strong>Incubadoras</strong></td><td>Por fuera 1 vez por día; puertas y botones 3 veces; a fondo al alta o cada 7 días</td></tr>
-    <tr><td><strong>Partos y diálisis</strong></td><td>Antes y después de cada paciente</td></tr>
+    <tr><td><strong>Partos, diálisis y quemados</strong></td><td>Antes y después de cada paciente, y mínimo 1 vez por día</td></tr>
     <tr><td><strong>Quirófano</strong></td><td>Antes del primero, entre cirugías y a fondo al final</td></tr>
     <tr><td><strong>Salas de internación</strong></td><td>2 veces por día, y a fondo cuando el paciente se va</td></tr>
     <tr><td><strong>Consultorios</strong></td><td>2 veces por día; el piso al final del día</td></tr>
