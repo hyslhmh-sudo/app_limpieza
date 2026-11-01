@@ -2,7 +2,7 @@
    - Guarda la app en el celular para que funcione sin conexión.
    - Con conexión, siempre busca primero la versión nueva publicada (así los cambios llegan solos).
    Para forzar la actualización de todo, cambiar el número de VERSION. */
-const VERSION = 'limpieza-v2-2026-11';
+const VERSION = 'limpieza-v3-2026-11';
 const ARCHIVOS = [
   './',
   './index.html',
